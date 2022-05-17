@@ -8,13 +8,14 @@ class Task {
   bool verdict;
   int contest_id = 0, rating = 0;
   std::set<std::string> tags;
-  std::string handle;
+  std::string handle, name;
  public:
   Task(const std::string &task);
   bool GetVerdict();
   std::set<std::string> GetTags();
   int GetRating();
   std::string GetHandle();
+  std::string GetTaskName();
 };
 
 class Participant {

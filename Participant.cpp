@@ -16,9 +16,9 @@ Task::Task(const std::string &task) {
     }
     index = task.find("tags");
     while (task[index] != '[') ++index;
-    if (task[index + 1] != ']'){
+    if (task[index + 1] != ']') {
         index += 2;
-        while (task[index] != ']'){
+        while (task[index] != ']') {
             std::string cur_tag;
             while (task[index] != '\"') {
                 cur_tag += task[index];
@@ -37,6 +37,13 @@ Task::Task(const std::string &task) {
     index += 9;
     while (task[index] != '\"') {
         handle += task[index];
+        ++index;
+    }
+    index = task.find("name");
+    while (task[index] != '\"') ++index;
+    index += 3;
+    while (task[index] != '\"'){
+        name += task[index];
         ++index;
     }
 }
@@ -118,6 +125,10 @@ bool Participant::GetCFStatus() {
     return CF_Avaliable;
 }
 
+std::string Task::GetTaskName() {
+    return name;
+}
+
 std::pair<int, int> Participant::TagCount(const std::string &tag) { // first - OK, second - all
     std::pair<int, int> ret{0, 0};
     for (auto task: tasks) {
@@ -142,7 +153,7 @@ int Participant::GetRating(const std::string &file_name) {
     index = text.find("rating");
     while (text[index] < '0' || text[index] > '9') ++index;
     rating = 0;
-    while (text[index] >= '0' && text[index] <= '9'){
+    while (text[index] >= '0' && text[index] <= '9') {
         rating = rating * 10 + text[index] - '0';
         ++index;
     }
