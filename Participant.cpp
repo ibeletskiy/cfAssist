@@ -126,3 +126,21 @@ std::pair<int, int> Participant::TagCount(const std::string &tag) { // first - O
     }
     return ret;
 }
+
+int Participant::GetRating(const std::string &file_name) {
+    std::fstream in(file_name);
+    std::string text;
+    std::getline(in, text);
+    int index = text.find("FAILED");
+    if (index >= 0 && index < text.size()) {
+        return -1;
+    }
+    index = text.find("rating");
+    while (text[index] < '0' || text[index] > '9') ++index;
+    rating = 0;
+    while (text[index] >= '0' && text[index] <= '9'){
+        rating = rating * 10 + text[index] - '0';
+        ++index;
+    }
+    return rating;
+}

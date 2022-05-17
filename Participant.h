@@ -24,6 +24,7 @@ class Participant {
   std::string handle;
   bool CF_Avaliable = true;
   bool status = true;
+  int rating = 0;
  public:
   Participant(const std::string &file_name);
   int GetAllTask();
@@ -33,5 +34,6 @@ class Participant {
   void RemakeInputFile(const std::string &input_file);
   std::pair<int, int> TagCount(const std::string &tag);
   std::string GetHandle();
+  int GetRating(const std::string& file_name);
 };
 
