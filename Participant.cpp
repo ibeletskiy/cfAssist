@@ -47,7 +47,7 @@ Task::Task(const std::string &task) {
         ++index;
     }
     index = task.find("participantType");
-    while (index != '\"'){
+    while (task[index] != '\"'){
         ++index;
     }
     index += 3;
