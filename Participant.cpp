@@ -25,9 +25,10 @@ Task::Task(const std::string &task) {
                 ++index;
             }
             tags.insert(cur_tag);
+            ++index;
         }
-
     }
+    if (tags.find(",") != tags.end()) tags.erase(",");
     index = task.find("verdict");
     index += 7 + 3;
     if (task[index] == 'O') verdict = true;
@@ -79,8 +80,8 @@ void Participant::RemakeInputFile(const std::string &input_file) {
     while (text.size() >= 1) {
         index = text.find("memoryConsumedBytes");
         while (text[index] != ',' && index < text.size()) ++index;
-        text.substr(0, index + 1);
-        out << text << '\n';
+        auto str = text.substr(0, index + 1);
+        out << str << '\n';
         text.erase(0, index + 1);
     }
 }
