@@ -30,8 +30,8 @@ class Participant {
   int GetOKTask();
   std::vector<Task> ListAllTask();
   bool GetCFStatus();
-  void RemakeInputFile(const std::string& input_file);
-  std::pair<int, int> TagCount(const std::string& tag);
+  void RemakeInputFile(const std::string &input_file);
+  std::pair<int, int> TagCount(const std::string &tag);
   std::string GetHandle();
 };
 

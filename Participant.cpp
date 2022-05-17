@@ -1,6 +1,5 @@
 #include "Participant.h"
 
-
 Task::Task(const std::string &task) {
     int index;
     index = task.find("contestId");
@@ -36,7 +35,6 @@ Task::Task(const std::string &task) {
         handle += task[index];
         ++index;
     }
-    int a = 0;
 }
 
 bool Task::GetVerdict() {
@@ -51,25 +49,25 @@ int Task::GetRating() {
     return rating;
 }
 
-std::string Task::GetHandle(){
+std::string Task::GetHandle() {
     return handle;
 }
 
-std::string Participant::GetHandle(){
+std::string Participant::GetHandle() {
     return handle;
 }
 
-void Participant::RemakeInputFile(const std::string& input_file){
+void Participant::RemakeInputFile(const std::string &input_file) {
     std::fstream in(input_file);
     std::string text;
     std::getline(in, text);
-    if (text[0] == '<'){
+    if (text[0] == '<') {
         CF_Avaliable = false;
         return;
     }
     std::ofstream out("new_input_file.txt");
     int index = text.find("FAILED");
-    if (index >= 0 && index < text.size()){
+    if (index >= 0 && index < text.size()) {
         status = false;
         return;
     }
@@ -91,7 +89,7 @@ Participant::Participant(const std::string &file_name) {
     }
     std::string line;
     std::fstream in("new_input_file.txt");
-    while (std::getline(in, line)){
+    while (std::getline(in, line)) {
         Task cur_task(line);
         tasks.push_back(cur_task);
         all_count++;
@@ -117,8 +115,8 @@ bool Participant::GetCFStatus() {
 }
 
 std::pair<int, int> Participant::TagCount(const std::string &tag) { // first - OK, second - all
-    std::pair<int, int> ret {0, 0};
-    for (auto task : tasks){
+    std::pair<int, int> ret{0, 0};
+    for (auto task: tasks) {
         if (task.GetVerdict()) {
             ret.first++;
             ret.second++;
