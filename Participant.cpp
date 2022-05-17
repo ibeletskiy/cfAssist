@@ -117,11 +117,13 @@ bool Participant::GetCFStatus() {
 std::pair<int, int> Participant::TagCount(const std::string &tag) { // first - OK, second - all
     std::pair<int, int> ret{0, 0};
     for (auto task: tasks) {
-        if (task.GetVerdict()) {
-            ret.first++;
-            ret.second++;
-        } else {
-            ret.second++;
+        if (task.GetTags().find(tag) != task.GetTags().end()) {
+            if (task.GetVerdict()) {
+                ret.first++;
+                ret.second++;
+            } else {
+                ret.second++;
+            }
         }
     }
     return ret;
