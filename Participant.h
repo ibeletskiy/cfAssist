@@ -5,7 +5,7 @@
 
 class Task {
  private:
-  bool verdict;
+  bool verdict, solving_type;
   int contest_id = 0, rating = 0;
   std::set<std::string> tags;
   std::string handle, name;
@@ -16,6 +16,7 @@ class Task {
   int GetRating();
   std::string GetHandle();
   std::string GetTaskName();
+  bool GetSolvingType();
 };
 
 class Participant {

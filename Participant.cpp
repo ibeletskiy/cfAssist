@@ -46,6 +46,16 @@ Task::Task(const std::string &task) {
         name += task[index];
         ++index;
     }
+    index = task.find("participantType");
+    while (index != '\"'){
+        ++index;
+    }
+    index += 3;
+    if (task[index] == 'P' && task[index + 1] == 'A'){
+        solving_type = true;
+    } else {
+        solving_type = false;
+    }
 }
 
 bool Task::GetVerdict() {
@@ -62,6 +72,10 @@ int Task::GetRating() {
 
 std::string Task::GetHandle() {
     return handle;
+}
+
+bool Task::GetSolvingType() {
+    return solving_type;
 }
 
 std::string Participant::GetHandle() {
