@@ -15,15 +15,18 @@ Task::Task(const std::string &task) {
         ++index;
     }
     index = task.find("tags");
-    index += 8;
-    while (task[index - 1] != '}') {
-        std::string cur_tag;
-        while (task[index] != '\"') {
-            cur_tag += task[index];
-            ++index;
+    while (task[index] != '[') ++index;
+    if (task[index + 1] != ']'){
+        index += 2;
+        while (task[index] != ']'){
+            std::string cur_tag;
+            while (task[index] != '\"') {
+                cur_tag += task[index];
+                ++index;
+            }
+            tags.insert(cur_tag);
         }
-        tags.insert(cur_tag);
-        index += 3;
+
     }
     index = task.find("verdict");
     index += 7 + 3;
@@ -75,7 +78,7 @@ void Participant::RemakeInputFile(const std::string &input_file) {
     text.erase(0, index + 1);
     while (text.size() >= 1) {
         index = text.find("memoryConsumedBytes");
-        while (text[index] != ',') ++index;
+        while (text[index] != ',' && index < text.size()) ++index;
         text.substr(0, index + 1);
         out << text << '\n';
         text.erase(0, index + 1);
@@ -117,13 +120,11 @@ bool Participant::GetCFStatus() {
 std::pair<int, int> Participant::TagCount(const std::string &tag) { // first - OK, second - all
     std::pair<int, int> ret{0, 0};
     for (auto task: tasks) {
-        if (task.GetTags().find(tag) != task.GetTags().end()) {
-            if (task.GetVerdict()) {
-                ret.first++;
-                ret.second++;
-            } else {
-                ret.second++;
-            }
+        if (task.GetVerdict()) {
+            ret.first++;
+            ret.second++;
+        } else {
+            ret.second++;
         }
     }
     return ret;
