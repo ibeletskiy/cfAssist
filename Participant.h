@@ -6,7 +6,7 @@
 class Task {
  private:
   bool verdict, solving_type;
-  int contest_id = 0, rating = 0;
+  int contest_id, rating;
   std::set<std::string> tags;
   std::string handle, name;
  public:
@@ -21,12 +21,12 @@ class Task {
 
 class Participant {
  private:
-  int all_count = 0, solved_count = 0;
+  int all_count, solved_count;
   std::vector<Task> tasks;
   std::string handle;
-  bool CF_Avaliable = true;
-  bool status = true;
-  int rating = 0;
+  bool CF_Avaliable;
+  bool status;
+  int rating;
  public:
   Participant(const std::string &file_name);
   int GetAllTask();

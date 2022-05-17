@@ -4,12 +4,14 @@ Task::Task(const std::string &task) {
     int index;
     index = task.find("contestId");
     index += 11;
+    contest_id = 0;
     while (task[index] != ',') {
         contest_id = contest_id * 10 + task[index] - '0';
         ++index;
     }
     index = task.find("rating");
     index += 8;
+    rating = 0;
     while (task[index] != ',') {
         rating = rating * 10 + task[index] - '0';
         ++index;
@@ -86,6 +88,7 @@ void Participant::RemakeInputFile(const std::string &input_file) {
     std::fstream in(input_file);
     std::string text;
     std::getline(in, text);
+    status = CF_Avaliable = true;
     if (text[0] == '<') {
         CF_Avaliable = false;
         return;
@@ -112,6 +115,7 @@ Participant::Participant(const std::string &file_name) {
     if (!status || !CF_Avaliable) {
         return;
     }
+    all_count = solved_count = 0;
     std::string line;
     std::fstream in("new_input_file.txt");
     while (std::getline(in, line)) {
