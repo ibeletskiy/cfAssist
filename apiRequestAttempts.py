@@ -4,14 +4,7 @@ import time
 import random
 
 inputfile = open('handle.txt', 'r')
-cnt = (int)(0)
-for line in inputfile:
-    if cnt == 0:
-       handle = line
-    else:
-        output_name = line
-    cnt += 1
-inputfile.close()
+handle = inputfile.read()
 handle = handle[:-1]
 request_header = "https://codeforces.com/api/"
 request_type = "user.status?"
@@ -29,6 +22,6 @@ final = request_header + request_type + name + "&" + fr + "&" + count + "&" + ap
 response = requests.get(final)
 
 answer = response.text
-output = open(output_name, 'w');
+output = open('response.txt', 'w');
 output.write(answer);
 output.close()
