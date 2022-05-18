@@ -66,7 +66,7 @@ Task::Task(const std::string &task) {
             ++index;
         }
         index += 3;
-        if (task[index] == 'P' && task[index + 1] == 'A') {
+        if (task[index] == 'C' && task[index + 1] == 'O') {
             solving_type = true;
         } else {
             solving_type = false;
@@ -83,7 +83,8 @@ std::set<std::string> Task::GetTags() {
 }
 
 int Task::GetRating() {
-    return rating;
+    if (rating >= 0 && rating <= 3500) return rating;
+    return 0;
 }
 
 std::string Task::GetHandle() {
