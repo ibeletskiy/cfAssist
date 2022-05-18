@@ -1,7 +1,5 @@
 #include "Participant.h"
 
-const int INF = -1e9; // в случае если не определенности
-
 Task::Task(const std::string &task) {
     int index;
     index = task.find("contestId");
@@ -68,7 +66,7 @@ Task::Task(const std::string &task) {
             ++index;
         }
         index += 3;
-        if (task[index] == 'C' && task[index + 1] == 'O') {
+        if (task[index] == 'P' && task[index + 1] == 'A') {
             solving_type = true;
         } else {
             solving_type = false;
@@ -85,8 +83,7 @@ std::set<std::string> Task::GetTags() {
 }
 
 int Task::GetRating() {
-    if (rating <= 3500) return rating;
-    return 0;
+    return rating;
 }
 
 std::string Task::GetHandle() {
@@ -217,27 +214,4 @@ int Participant::GetRating(const std::string &file_name) {
         ++index;
     }
     return rating;
-}
-
-// мы хотим посчитать тупо отношение ок задач на общее и средний рейтинг
-std::pair<double, double> GetRatingAndStability(Participant &person, std::string &type_task) {
-    std::set<std::string> was;
-    int OK = 0, ALL = 0, SM = 0;
-    for (Task x: person.ListAllTask()) {
-        if (was.find(x.GetTaskName()) != was.end()) {
-            continue;
-        }
-        auto ids = x.GetTags();
-        if (ids.find(type_task) != ids.end()) {
-            ALL++;
-            if (x.GetVerdict()) {
-                OK++;
-                SM += x.GetRating();
-            }
-            was.insert(x.GetTaskName());
-        }
-    }
-    if (!ALL && !OK) return {INF, INF};
-    if (!OK) return {0, INF};
-    return {OK / (double) ALL, SM / (double) OK};
 }
