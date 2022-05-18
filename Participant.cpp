@@ -101,6 +101,12 @@ void Participant::RemakeInputFile(const std::string &input_file) {
         status = false;
         return;
     }
+    if (text.size() < 100){
+        std::ofstream out("new_input_file.txt");
+        out << text;
+        out.close();
+        return;
+    }
     index = text.find('[');
     text.erase(0, index + 1);
     while (text.size() >= 1) {
@@ -110,6 +116,8 @@ void Participant::RemakeInputFile(const std::string &input_file) {
         out << str << '\n';
         text.erase(0, index + 1);
     }
+    in.close();
+    out.close();
 }
 
 Participant::Participant(const std::string &file_name) {
@@ -121,12 +129,14 @@ Participant::Participant(const std::string &file_name) {
     std::string line;
     std::fstream in("new_input_file.txt");
     while (std::getline(in, line)) {
+        if (line.size() < 100) continue;
         Task cur_task(line);
         tasks.push_back(cur_task);
         all_count++;
         if (cur_task.GetVerdict()) solved_count++;
         handle = cur_task.GetHandle();
     }
+    in.close();
 }
 
 int Participant::GetAllTask() {
