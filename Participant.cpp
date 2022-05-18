@@ -190,8 +190,7 @@ int Participant::GetRating(const std::string &file_name) {
     return rating;
 }
 
-// мы хотим посчитать тупо отношение ок задач на общее и средний рейтинг
-std::pair<double, double> GetRatingAndStability(Participant &person, std::string &type_task) {
+double GetAverageRating(Participant &person, std::string &type_task) {
     std::set<std::string> was;
     int OK = 0, ALL = 0, SM = 0;
     for (Task x : person.ListAllTask()) {
@@ -208,7 +207,69 @@ std::pair<double, double> GetRatingAndStability(Participant &person, std::string
             was.insert(x.GetTaskName());
         }
     }
-    if (!ALL && !OK) return {INF, INF};
-    if (!OK) return {0, INF};
-    return {OK / (double)ALL, SM / (double)OK};
+    if (!OK) return {INF};
+    return {SM / (double)OK};
+}
+
+
+double GetStability(Participant &person, std::string &type_task) {
+    std::set<std::string> was;
+    int OK = 0, ALL = 0, SM = 0;
+    for (Task x : person.ListAllTask()) {
+        if (was.find(x.GetTaskName()) != was.end()) {
+            continue;
+        }
+        auto ids = x.GetTags();
+        if (ids.find(type_task) != ids.end()) {
+            ALL++;
+            if (x.GetVerdict()) {
+                OK++;
+                SM += x.GetRating();
+            }
+            was.insert(x.GetTaskName());
+        }
+    }
+    if (!ALL) return {INF};
+    return {OK / (double)ALL};
+}
+
+int GetOK(Participant &person, std::string &type_task) {
+    std::set<std::string> was;
+    int OK = 0, ALL = 0, SM = 0;
+    for (Task x : person.ListAllTask()) {
+        if (was.find(x.GetTaskName()) != was.end()) {
+            continue;
+        }
+        auto ids = x.GetTags();
+        if (ids.find(type_task) != ids.end()) {
+            ALL++;
+            if (x.GetVerdict()) {
+                OK++;
+                SM += x.GetRating();
+            }
+            was.insert(x.GetTaskName());
+        }
+    }
+    return OK;
+}
+
+
+int GetALL(Participant &person, std::string &type_task) {
+    std::set<std::string> was;
+    int OK = 0, ALL = 0, SM = 0;
+    for (Task x : person.ListAllTask()) {
+        if (was.find(x.GetTaskName()) != was.end()) {
+            continue;
+        }
+        auto ids = x.GetTags();
+        if (ids.find(type_task) != ids.end()) {
+            ALL++;
+            if (x.GetVerdict()) {
+                OK++;
+                SM += x.GetRating();
+            }
+            was.insert(x.GetTaskName());
+        }
+    }
+    return ALL;
 }
