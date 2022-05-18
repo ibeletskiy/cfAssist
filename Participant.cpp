@@ -2,7 +2,7 @@
 
 const int INF = -1e9; // в случае если не определенности
 
-Task::Task(const std::string &task) {
+Task::Task(const std::string& task) {
     int index;
     index = task.find("contestId");
     index += 11;
@@ -46,16 +46,16 @@ Task::Task(const std::string &task) {
     index = task.find("name");
     while (task[index] != '\"') ++index;
     index += 3;
-    while (task[index] != '\"'){
+    while (task[index] != '\"') {
         name += task[index];
         ++index;
     }
     index = task.find("participantType");
-    while (task[index] != '\"'){
+    while (task[index] != '\"') {
         ++index;
     }
     index += 3;
-    if (task[index] == 'P' && task[index + 1] == 'A'){
+    if (task[index] == 'P' && task[index + 1] == 'A') {
         solving_type = true;
     } else {
         solving_type = false;
@@ -86,7 +86,7 @@ std::string Participant::GetHandle() {
     return handle;
 }
 
-void Participant::RemakeInputFile(const std::string &input_file) {
+void Participant::RemakeInputFile(const std::string& input_file) {
     std::fstream in(input_file);
     std::string text;
     std::getline(in, text);
@@ -101,7 +101,7 @@ void Participant::RemakeInputFile(const std::string &input_file) {
         status = false;
         return;
     }
-    if (text.size() < 100){
+    if (text.size() < 100) {
         std::ofstream out("new_input_file.txt");
         out << text;
         out.close();
@@ -120,7 +120,7 @@ void Participant::RemakeInputFile(const std::string &input_file) {
     out.close();
 }
 
-Participant::Participant(const std::string &file_name) {
+Participant::Participant(const std::string& file_name) {
     RemakeInputFile(file_name);
     if (!status || !CF_Avaliable) {
         return;
@@ -159,9 +159,9 @@ std::string Task::GetTaskName() {
     return name;
 }
 
-std::pair<int, int> Participant::TagCount(const std::string &tag) { // first - OK, second - all
-    std::pair<int, int> ret{0, 0};
-    for (auto task: tasks) {
+std::pair<int, int> Participant::TagCount(const std::string& tag) { // first - OK, second - all
+    std::pair<int, int> ret{ 0, 0 };
+    for (auto task : tasks) {
         if (task.GetVerdict()) {
             ret.first++;
             ret.second++;
@@ -172,7 +172,7 @@ std::pair<int, int> Participant::TagCount(const std::string &tag) { // first - O
     return ret;
 }
 
-int Participant::GetRating(const std::string &file_name) {
+int Participant::GetRating(const std::string& file_name) {
     std::fstream in(file_name);
     std::string text;
     std::getline(in, text);
@@ -188,88 +188,4 @@ int Participant::GetRating(const std::string &file_name) {
         ++index;
     }
     return rating;
-}
-
-double GetAverageRating(Participant &person, std::string &type_task) {
-    std::set<std::string> was;
-    int OK = 0, ALL = 0, SM = 0;
-    for (Task x : person.ListAllTask()) {
-        if (was.find(x.GetTaskName()) != was.end()) {
-            continue;
-        }
-        auto ids = x.GetTags();
-        if (ids.find(type_task) != ids.end()) {
-            ALL++;
-            if (x.GetVerdict()) {
-                OK++;
-                SM += x.GetRating();
-            }
-            was.insert(x.GetTaskName());
-        }
-    }
-    if (!OK) return {INF};
-    return {SM / (double)OK};
-}
-
-
-double GetStability(Participant &person, std::string &type_task) {
-    std::set<std::string> was;
-    int OK = 0, ALL = 0, SM = 0;
-    for (Task x : person.ListAllTask()) {
-        if (was.find(x.GetTaskName()) != was.end()) {
-            continue;
-        }
-        auto ids = x.GetTags();
-        if (ids.find(type_task) != ids.end()) {
-            ALL++;
-            if (x.GetVerdict()) {
-                OK++;
-                SM += x.GetRating();
-            }
-            was.insert(x.GetTaskName());
-        }
-    }
-    if (!ALL) return {INF};
-    return {OK / (double)ALL};
-}
-
-int GetOK(Participant &person, std::string &type_task) {
-    std::set<std::string> was;
-    int OK = 0, ALL = 0, SM = 0;
-    for (Task x : person.ListAllTask()) {
-        if (was.find(x.GetTaskName()) != was.end()) {
-            continue;
-        }
-        auto ids = x.GetTags();
-        if (ids.find(type_task) != ids.end()) {
-            ALL++;
-            if (x.GetVerdict()) {
-                OK++;
-                SM += x.GetRating();
-            }
-            was.insert(x.GetTaskName());
-        }
-    }
-    return OK;
-}
-
-
-int GetALL(Participant &person, std::string &type_task) {
-    std::set<std::string> was;
-    int OK = 0, ALL = 0, SM = 0;
-    for (Task x : person.ListAllTask()) {
-        if (was.find(x.GetTaskName()) != was.end()) {
-            continue;
-        }
-        auto ids = x.GetTags();
-        if (ids.find(type_task) != ids.end()) {
-            ALL++;
-            if (x.GetVerdict()) {
-                OK++;
-                SM += x.GetRating();
-            }
-            was.insert(x.GetTaskName());
-        }
-    }
-    return ALL;
 }
