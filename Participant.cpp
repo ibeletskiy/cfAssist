@@ -1,7 +1,5 @@
 #include "Participant.h"
 
-const int INF = -1e9; // в случае если не определенности
-
 Task::Task(const std::string& task) {
     int index;
     index = task.find("contestId");
