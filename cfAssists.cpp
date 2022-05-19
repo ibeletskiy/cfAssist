@@ -126,8 +126,90 @@ Participant makeUser(const std::string& name) {
 
 std::string getSubject(const std::string& now) {
 	RenderWindow window(VideoMode(1450, 1000), "cfAssist", Style::Close | Style::Titlebar);
-	std::string ans = now;
-	return "dp";
+	std::string ans = "";
+
+	Color back(24, 4, 36, 255);
+	Color text = Color::White;
+
+	int n = 12, m = 3;
+
+	std::vector<std::vector<CircleButton>> buttons(n, std::vector<CircleButton>(m));
+
+	std::ifstream in("tags.txt");
+
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			buttons[i][j].setButtonSize(10, 3);
+			buttons[i][j].setButtonColor(back, text, text);
+			std::string name;
+			std::getline(in, name);
+			buttons[i][j].setTitle(name, 22, text);
+			buttons[i][j].setButtonPosition(Vector2f(50 + 510 * j, 50 + 80 * i));
+			buttons[i][j].setTitlePosition(Vector2f(95 + 510 * j, 48 + 80 * i));
+		}
+	}
+
+	int indi = -1, indj = -1;
+
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			if (buttons[i][j].title.getString() == now) {
+				buttons[i][j].was_pressed = true;
+				indi = i;
+				indj = j;
+			}
+		}
+	}
+	
+	in.close();
+
+	while (window.isOpen()) {
+		window.clear(back);
+		Event event;
+		Vector2i mouse_position = Mouse::getPosition(window);
+		while (window.pollEvent(event)) {
+			if (event.type == Event::Closed || (event.type == Event::KeyPressed && event.key.code == Keyboard::Enter)) {
+				window.close();
+			}
+			for (int i = 0; i < n; ++i) {
+				for (int j = 0; j < m; ++j) {
+					if (buttons[i][j].pressed(mouse_position, event)) {
+						if (buttons[i][j].was_pressed) {
+							buttons[i][j].was_pressed = false;
+							indi = -1;
+							indj = -1;
+						} else {
+							if (indi == -1) {
+								buttons[i][j].was_pressed = true;
+								indi = i;
+								indj = j;
+							} else {
+								buttons[i][j].was_pressed = true;
+								buttons[indi][indj].was_pressed = false;
+								indi = i;
+								indj = j;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		for (int i = 0; i < n; ++i) {
+			for (int j = 0; j < m; ++j) {
+				buttons[i][j].draw(window);
+			}
+		}
+		window.display();
+	}
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			if (buttons[i][j].was_pressed) {
+				ans = buttons[i][j].title.getString();
+			}
+		}
+	}
+	return ans;
 }
 
 void updateSubject(Text& text, int x, Button& edit, Sprite& edit_sprite) {
